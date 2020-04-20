@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"/>
+        <link rel="icon" href="{{  url_for('static', filename='favicon.png') }}">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#"><h3>Pokédex</h3></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                        <form class="form-inline my-2 my-lg-0">
+                            <input id="search" onkeyup="filterCards()" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        </form>
+                    </div>
+                </div>
+            </nav>
+            <div class="grid">
+                {% for poke in poke_list %}
+                    <!-- Grid card -->
+                    <div class="card" style="width: 12rem;" data-toggle="modal" data-target="#poke{{ poke.id }}">
+                        <div class="card-body">
+                            <img src="{{ poke.sprite }}" width="100%" style="border: 1px;">
+                            <div class="card-text">#{{ poke.id }} {{ poke.name }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="poke{{ poke.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div id="left_column" class="col">
+                                            <img src="{{ poke.sprite }}" height="150" width="150" border="1px"/>
+                                            <p>Base XP: {{ poke.base_xp }}</p>
+                                            <p>Height: {{ poke.height }}</p>
+                                            <p>Weight: {{ poke.weight }}</p>
+                                            <h4>Abilities</h4>
+                                            {% for ability in poke.abilities.split(', ') %}
+                                                <p>{{ ability.capitalize() }}</p>
+                                            {% endfor %}
+                                        </div>
+                                        <div id="right_column" class="col">
+                                            <h3>#{{ poke.id }} {{ poke.name }}</h3>
+                                            {% if poke.type_2 == None %}
+                                                <p>{{ poke.type_1 }}</p>
+                                            {% else %}
+                                                <p>{{ poke.type_1 }}, {{ poke.type_2 }}</p>
+                                            {% endif %}
+                                            <h4>Base Stats</h4>
+                                            <p>HP: {{ poke.hp}}</p>
+                                            <p>Attack: {{ poke.attack }}</p>
+                                            <p>Defense: {{ poke.defense }}</p>
+                                            <p>Sp. Atk: {{ poke.sp_atk }}</p>
+                                            <p>Sp. Def: {{ poke.sp_def }}</p>
+                                            <p>Speed: {{ poke.speed}}</p>
+                                            <h4>Held Items</h4>
+                                            {% if poke.held_items == None %}
+                                                <p>None</p>
+                                            {% else %}
+                                                {% for item in poke.held_items.split(', ') %}
+                                                    <p>{{ item.capitalize() }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
+</html>
